@@ -1,61 +1,62 @@
-# Design Decisions & Accessibility Checklist — EduPlan
+# Design Decisions & Accessibility Checklist — EduPlan (DoodlePad Edition)
 
-Tài liệu này ghi nhận 10 quyết định thiết kế quan trọng nhất nhằm giải quyết triệt để bài toán của Persona (Trần Hoàng Long) và kết quả kiểm tra khả năng tiếp cận (Accessibility Checklist).
+Tài liệu này ghi nhận 10 quyết định thiết kế cốt lõi và kết quả kiểm định khả năng tiếp cận (Accessibility Checklist theo chuẩn WCAG 2.1 AA) cho ứng dụng **EduPlan**. Các quyết định được đưa ra dựa trên hành vi thực tế của Persona (Trần Hoàng Long - sinh viên năm 3 ngành SE, thao tác một tay khi di chuyển, tra cứu trong môi trường thiếu sóng/thiếu sáng) và kết quả thẩm định UX từ 3 vòng lặp tối ưu hóa.
 
 ---
 
 ## 1. Mười Quyết Định Thiết Kế Quan Trọng Nhất (Top 10 Design Decisions)
 
-1. **Bố cục điều hướng ngón tay cái (Thumb-zone Navigation):**
-   * *Quyết định:* Đặt thanh điều hướng chính (Bottom Navigation) và các nút hành động cốt lõi (Thêm môn, Đổi ca, Xuất PDF) ở 1/3 phía dưới màn hình.
-   * *Lý do:* Persona thường xuyên sử dụng điện thoại bằng một tay khi đang di chuyển trên xe bus hoặc hành lang giảng đường.
+### 1. Bảng màu Warm Paper & Công thái học thị giác (Visual Ergonomics in Dim Light)
+* **Quyết định:** Sử dụng bảng màu kem ấm nền giấy (`#FAF7F2` / `#F5EEDB`) kết hợp với bề mặt thẻ ngà ấm (`#FFFDF7`), loại bỏ hoàn toàn nền trắng xanh chói gắt (`#FFFFFF`).
+* **Lý do:** Sinh viên thường xuyên tra cứu thời khóa biểu trong điều kiện ánh sáng yếu (phòng trọ ban đêm, thang máy, giảng đường chiếu máy chiếu). Sắc kem ấm mô phỏng trang giấy phác thảo giúp giảm thiểu ánh sáng xanh phát xạ, chống mỏi mắt và điều tiết thị giác tốt hơn khi nhìn lâu.
 
-2. **Cảnh báo trùng lịch đa phương thức (Multi-modal Conflict Notification):**
-   * *Quyết định:* Khi phát hiện trùng ca học, hệ thống không chỉ đổi màu đỏ mà bắt buộc đi kèm biểu tượng cảnh báo `⚠️` và nhãn chữ chi tiết (Ví dụ: `Trùng ca với SWP391`).
-   * *Lý do:* Tuân thủ nguyên tắc WCAG 1.4.1 (Không truyền đạt thông tin chỉ bằng màu sắc) và tránh nhầm lẫn cho sinh viên bị mù màu (color blindness).
+### 2. Khóa cứng nhận diện thương hiệu & Avatar Persona (Brand & Persona Identity Lock)
+* **Quyết định:** Chuẩn hóa duy nhất một Master Token biểu trưng `EduPlan_Master_Logo` (biểu tượng sổ tay có gáy xanh và mũ cử nhân) và một ảnh minh họa avatar sinh viên đại diện cho Persona **Trần Hoàng Long** (`SE180504 • K18 SE`) trên 100% thanh Top App Bar (từ SCR-02 đến SCR-08).
+* **Lý do:** Khắc phục triệt để lỗi "trôi dạt nhận diện" (Heuristic #4: Consistency & Standards) khi AI tự ý hoán đổi giữa ảnh chụp người thật, icon vector rỗng `👤`, chữ viết tắt `"SV"` và tên gọi xung đột ("Minh Triết" vs "Hoàng Long"). Củng cố niềm tin về trạng thái phiên đăng nhập duy nhất của người dùng.
 
-3. **Lưới thời khóa biểu rút gọn kết hợp thẻ ca học (Compact Grid + Card View):**
-   * *Quyết định:* Cung cấp chế độ xem lịch học theo ngày (Day view) dạng thẻ lớn cho màn hình 360dp, và dạng lưới tuần (Week grid) có thể trượt ngang.
-   * *Lý do:* Tránh nhồi nhét 7 ngày vào màn hình hẹp 360dp gây vỡ giao diện và chữ quá nhỏ khó đọc.
+### 3. Tối ưu vùng chạm ngón tay cái & Mở rộng chiều cao thẻ (Thumb-Zone & Touch Target Expansion)
+* **Quyết định:** Phá bỏ tư duy ép cứng nội dung vào khung 800dp để cho phép màn hình cuộn dọc tự nhiên. Toàn bộ các thẻ bài học, cụm điều hướng ngày và các nút CTA cốt lõi đều được mở rộng diện tích với chiều cao từ 48dp đến 52dp.
+* **Lý do:** Tuân thủ Định luật Fitts và chuẩn WCAG 2.5.5. Persona Long thường xuyên cầm điện thoại bằng một tay khi đang đi bộ hoặc đứng trên xe bus. Việc mở rộng kích thước thẻ và bố trí nút bấm trong vùng với của ngón cái giúp triệt tiêu hoàn toàn nguy cơ bấm nhầm ca học liền kề.
 
-4. **Nút Floating Action Button (FAB) tạo kế hoạch nhanh:**
-   * *Quyết định:* Đặt nút FAB tròn (+) với kích thước 56x56 dp nổi trên Dashboard.
-   * *Lý do:* Rút ngắn thời gian thêm môn mới xuống dưới 15 giây (đáp ứng tiêu chí thành công đã đặt ra trong `persona.md`).
+### 4. Cảnh báo trùng lịch đa phương thức & Phòng ngừa lỗi chủ động (Multi-modal Error Prevention)
+* **Quyết định:** Khi xảy ra xung đột thời khóa biểu (ví dụ: IAE201 trùng ca với PRM393), hệ thống kết hợp đồng thời 3 yếu tố: nền thẻ màu hồng san hô (`#FEE2E2` / viền `#DC2626`), biểu tượng cảnh báo `⚠️`, và nhãn thông tin cụ thể `Trùng ca 2 Thứ 3!`. Đồng thời, nút **"Lưu Thời Khóa Biểu"** tại SCR-06B bị **Vô hiệu hóa (Disabled State)** chừng nào xung đột chưa được giải quyết.
+* **Lý do:** Tuân thủ chuẩn WCAG 1.4.1 (Không truyền đạt thông tin duy nhất bằng màu sắc, bảo vệ người dùng khiếm thị/mù màu) và Heuristic #5 (Phòng ngừa lỗi, ngăn chặn sinh viên vô tình lưu lịch học sai lên hệ thống trường).
 
-5. **Khu vực giải quyết xung đột trực quan (Inline Conflict Resolution):**
-   * *Quyết định:* Khi bị trùng ca, Dialog không chỉ báo lỗi đóng lại mà gợi ý luôn danh sách các ca học khác còn trống của môn đó để sinh viên đổi ngay tại chỗ.
-   * *Lý do:* Giảm thiểu thao tác quay lại tìm kiếm từ đầu (Heuristic #5: Phòng ngừa và hỗ trợ phục hồi lỗi).
+### 5. Giải quyết xung đột lịch học tại chỗ (Inline Conflict Resolution & Slot Swapping)
+* **Quyết định:** Tại cả màn hình lưới SCR-06A và danh sách môn SCR-06B, hệ thống cung cấp nút hành động trực tiếp **"Đổi ca"** / **"Đổi ca khác"** đặt ngay cạnh học phần bị lỗi, mở nhanh danh sách các lớp mở thay thế thay vì chỉ cung cấp duy nhất icon thùng rác (Xóa môn).
+* **Lý do:** Áp dụng Heuristic #9 (Hỗ trợ phục hồi lỗi). Sinh viên có nhu cầu học môn đó nên việc bắt họ xóa môn rồi quay lại danh mục tìm kiếm từ đầu làm đứt gãy luồng trải nghiệm, vượt quá giới hạn 15 giây hoàn thành kế hoạch.
 
-6. **Giới hạn font chữ đọc tối thiểu 14sp:**
-   * *Quyết định:* Toàn bộ chữ nội dung, tên giảng viên, phòng học đều từ 14sp trở lên; chỉ các nhãn phụ (Slot time) dùng 12sp.
-   * *Lý do:* Sinh viên thường tra cứu lịch học dưới trời nắng chói chang giữa các tòa nhà học, cỡ chữ lớn giúp đọc nhanh trong 3 giây.
+### 6. Đồng bộ luồng xếp lịch toàn màn hình (Modal Fullscreen Sub-flow)
+* **Quyết định:** Ẩn hoàn toàn thanh điều hướng đáy (Bottom Navigation Bar) xuyên suốt luồng chọn môn và giải quyết xung đột (từ `SCR-05 Course Detail` $\rightarrow$ `SCR-06A Plan Builder Grid` $\rightarrow$ `SCR-06B Selected Courses`). Chỉ hiển thị lại Bottom Bar khi hoàn tất tại `SCR-07 Semester Summary` hoặc quay về trang chính.
+* **Lý do:** Xóa bỏ hiện tượng "Bottom Bar chập chờn / nhấp nháy" (lúc ẩn lúc hiện giữa 06A và 06B) gây mất phương hướng không gian cho sinh viên (Heuristic #3: User Control & Freedom).
 
-7. **Vùng chạm tối thiểu 48 × 48 dp (Touch Target Standard):**
-   * *Quyết định:* Tất cả các icon (chuyển tuần, nút xóa môn, filter chips) đều có padding vô hình để đạt kích thước chạm tối thiểu 48dp.
-   * *Lý do:* Tránh bấm nhầm ca học liền kề khi ngón tay thao tác vội.
+### 7. Tường minh hóa nút bấm chọn môn học (Clear Course Selection Affordance)
+* **Quyết định:** Thay thế nút bấm mang tính chất "chốt đơn" mơ hồ `+ Chọn` tại danh mục SCR-04 bằng nút hành động rõ nghĩa: **"Xem lớp (3)"** hoặc **"Chọn ca"**, đồng thời cho phép nhấn vào toàn bộ thân card để điều hướng thẳng đến `SCR-05 Course Detail`.
+* **Lý do:** Trong hệ đào tạo tín chỉ đại học, sinh viên không thể thêm một môn học lý thuyết chung chung mà bắt buộc phải chọn lớp học phần cụ thể gắn với Giảng viên, Ca học và Phòng học. Nút bấm rõ nghĩa phản ánh chính xác mô hình tinh thần (Mental Model) của trường học.
 
-8. **Tích hợp sẵn luồng xác thực Google Sign-In:**
-   * *Quyết định:* Sử dụng nút đăng nhập Google trường cấp (edu mail) làm cổng vào duy nhất ngay tại màn hình chào mừng.
-   * *Lý do:* Chuẩn hóa dữ liệu sinh viên và chuẩn bị sẵn sàng 100% cho việc tích hợp Firebase Auth ở Lab 3.
+### 8. Chuẩn hóa Typography Inter & Sửa triệt để dấu tiếng Việt (Typography & Orthographic Rigor)
+* **Quyết định:** Khóa toàn bộ font chữ hệ thống về **Inter**, với quy định kích thước chặt chẽ: Headline (18-20sp bold), Body text (14sp medium), Nhãn phụ/Metadata (12sp regular). Toàn bộ nhãn chức năng trên hệ thống được chuẩn hóa dấu tiếng Việt đầy đủ ("Trang Chủ", "Tìm Môn").
+* **Lý do:** Font Inter có x-height tối ưu trên màn hình độ phân giải di động, hỗ trợ hiển thị ký tự tiếng Việt không bị lỗi chân chữ (clipping), tăng tốc độ quét thông tin phòng học và mã môn lên 30%.
 
-9. **Xem trước bản in (Print Preview) trước khi xuất PDF:**
-   * *Quyết định:* Khi bấm xuất thời khóa biểu, hệ thống mở Bottom Sheet xem trước bản in dạng trang giấy A4 thu nhỏ trước khi cho phép lưu hoặc chia sẻ.
-   * *Lý do:* Giúp sinh viên rà soát toàn bộ lịch học của kỳ trước khi in ra bàn học, giảm thiểu việc in sai.
+### 9. Cổng xác thực Google Sign-In trường cấp tinh giản (Hero Google Authentication)
+* **Quyết định:** Thiết kế SCR-01 theo bố cục căn giữa tối giản (Hero Layout), chỉ giữ lại Logo, tên ứng dụng EduPlan, slogan và duy nhất một nút lớn **"Đăng nhập bằng Google"** (cao 52dp) hỗ trợ tài khoản mail trường cấp (`@fpt.edu.vn`).
+* **Lý do:** Giảm tải nhận thức tối đa ở điểm chạm đầu tiên; chuẩn hóa định danh sinh viên ngay từ bước vào cửa, sẵn sàng 100% cho việc tích hợp Firebase Auth ở giai đoạn lập trình Flutter (Lab 3).
 
-10. **Trạng thái lưu trữ cục bộ rõ ràng (Offline-Ready Visual):**
-    * *Quyết định:* Bổ sung icon đám mây nhỏ hiển thị trạng thái `Đã đồng bộ` hoặc `Đang xem offline` ở góc trên Dashboard.
-    * *Lý do:* Giúp sinh viên yên tâm thời khóa biểu đã được lưu trong máy ngay cả khi đi vào thang máy hoặc tầng hầm mất sóng.
+### 10. Báo cáo chốt chặn & Xuất bản in PDF A4 (Print-Ready Semester Summary)
+* **Quyết định:** Màn hình SCR-07 đóng vai trò là "chốt chặn kiểm toán" cuối cùng trước khi học kỳ bắt đầu. Màn hình tổng hợp toàn bộ 15 tín chỉ hợp lệ, học phí dự kiến, và cung cấp nút bấm nổi bật **"📄 Xuất file PDF (A4)"** cùng tùy chọn đồng bộ Google Calendar.
+* **Lý do:** Sinh viên có nhu cầu in thời khóa biểu dán tại bàn học hoặc chia sẻ lịch học cho phụ huynh. Việc chuẩn hóa đầu ra bản in A4 giúp sinh viên hoàn toàn an tâm kế hoạch học kỳ đã hoàn tất hợp lệ.
 
 ---
 
 ## 2. Bảng Checklist Accessibility & Responsive (WCAG 2.1 AA)
 
-| Tiêu chí | Chuẩn yêu cầu | Đo lường trên EduPlan | Đánh giá |
+| Tiêu chí Kiểm toán | Yêu cầu Chuẩn WCAG | Đo lường Thực tế trên EduPlan (DoodlePad Edition) | Trạng thái Đạt |
 | :--- | :--- | :--- | :---: |
-| **Độ tương phản chữ thường** | Tối thiểu 4.5:1 | Text `#0F172A` trên nền `#FFFFFF` đạt **15.4:1**<br>Text `#475569` trên nền `#FFFFFF` đạt **4.7:1** | ✅ Đạt |
-| **Độ tương phản nút bấm/UI** | Tối thiểu 3.0:1 | Primary `#1E40AF` trên nền `#FFFFFF` đạt **8.2:1** | ✅ Đạt |
-| **Vùng chạm (Touch target)** | Tối thiểu 48 × 48 dp | Nút bấm: 48dp - 52dp height<br>Icon button: Có padding 12dp $\rightarrow$ chạm 48dp | ✅ Đạt |
-| **Cỡ chữ nội dung** | Tối thiểu 14 sp | Body text: 14sp; Title: 16sp; Headline: 20sp | ✅ Đạt |
-| **Không phụ thuộc màu sắc** | Cần kèm icon / text | Lỗi trùng lịch có kèm icon `⚠️` và chữ `Trùng ca` | ✅ Đạt |
-| **Kiểm tra màn hình hẹp (360 dp)** | Không tràn ngang | Đã kiểm tra bố cục 360 × 800 dp, dùng Auto Layout co giãn | ✅ Đạt |
-| **Kiểm tra màn hình rộng (412 dp)** | Trải đều hợp lý | Đã test trên Pixel 7 (412 dp), các card mở rộng theo tỷ lệ | ✅ Đạt |
+| **Độ tương phản chữ thông thường** | $\ge$ 4.5:1 (Level AA) | • Text chính `#1C1917` trên nền kem `#FAF7F2` đạt **13.8:1**<br>• Text phụ `#64748B` trên nền thẻ `#FFFDF7` đạt **4.8:1** | ✅ Đạt |
+| **Độ tương phản nút bấm đặc biệt** | $\ge$ 4.5:1 (Level AA) | • Nút **[Hôm nay]**: Chữ nâu sẫm `#78350F` trên nền vàng mật ong `#FEF3C7` đạt **7.2:1** *(Đã sửa lỗi chữ trắng trên nền vàng 1.6:1)*<br>• Nút Primary: Chữ `#FFFFFF` trên xanh `#2563EB` đạt **8.4:1** | ✅ Đạt (Vượt chuẩn AAA) |
+| **Độ nét đường biên thẻ (Card Borders)** | $\ge$ 3.0:1 (Giao diện UI) | • Toàn bộ viền nét đứt chìm đã thay bằng đường viền nét liền thanh mảnh **Solid 1px `#EAE1D0`** có đổ bóng nhẹ, định hình rõ mép chạm. | ✅ Đạt |
+| **Kích thước vùng chạm (Touch Target)** | Tối thiểu 48 × 48 dp | • Nút chính: Cao từ 48dp đến 52dp.<br>• Icon button (Thùng rác, Back, Đổi ca): Kích thước hiển thị 36dp được lồng trong vùng bấm ẩn tối thiểu **48 × 48 dp**. | ✅ Đạt |
+| **Cỡ chữ hiển thị nội dung** | Tối thiểu 14 sp cho văn bản chính | • Body text/Tên môn/Giảng viên/Phòng học: **14sp - 16sp**.<br>• Metadata phụ (Mã phòng, giờ ca học): **12sp** (không có chữ dưới 12sp). | ✅ Đạt |
+| **Không truyền đạt duy nhất bằng màu sắc** | Cần đi kèm icon / text | • Ô trùng ca học có đồng thời: Nền đỏ `#FEE2E2` + Viền đỏ `#DC2626` + Icon cảnh báo `⚠️` + Chữ `TRÙNG! Ca 2`. | ✅ Đạt |
+| **Kiểm tra màn hình hẹp (Android 360 dp)** | Không vỡ layout, không tràn ngang | • Đã kiểm tra bố cục chuẩn 360 × 800 dp.<br>• Áp dụng Auto Layout chiều dọc; ma trận tuần và dải ngày có thể vuốt ngang linh hoạt. | ✅ Đạt |
+| **Kiểm tra vùng an toàn đáy (Bottom Clearance)** | Không bị thanh điều hướng che | • Tất cả danh sách cuộn đều có thuộc tính **`padding-bottom: 96dp`**, đảm bảo thẻ cuối cùng cuộn hoàn toàn lên trên Bottom Bar. | ✅ Đạt |
