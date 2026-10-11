@@ -10,7 +10,7 @@
 
 ## 🔗 Liên Kết Sản Phẩm
 
-* **Link Figma chính thức:** https://www.figma.com/design/p43KeBybC7w5tNvRGnYj0G/PRM393_Lab2_SE180504?m=auto&t=O9vQsxHv7CW7vW6e-1
+* **Link Figma chính thức:** https://www.figma.com/design/qArI3x6KlID119WJannYBN/PRM393_Lab2_Nhom4?m=auto&t=xFxhjtwnAfsIZBo4-1
 
 
 ---

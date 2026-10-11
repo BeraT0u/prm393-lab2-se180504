@@ -1,120 +1,126 @@
 ---
-name: Academic Matte Dark
+name: Warm Paper Academic
 colors:
-  surface: '#051424'
-  surface-dim: '#051424'
-  surface-bright: '#2c3a4c'
-  surface-container-lowest: '#010f1f'
-  surface-container-low: '#0d1c2d'
-  surface-container: '#122131'
-  surface-container-high: '#1c2b3c'
-  surface-container-highest: '#273647'
-  on-surface: '#d4e4fa'
-  on-surface-variant: '#c3c6d7'
-  inverse-surface: '#d4e4fa'
-  inverse-on-surface: '#233143'
-  outline: '#8d90a0'
-  outline-variant: '#434655'
-  surface-tint: '#b4c5ff'
-  primary: '#b4c5ff'
-  on-primary: '#002a78'
+  surface: '#fff8f5'
+  surface-dim: '#e0d8d5'
+  surface-bright: '#fff8f5'
+  surface-container-lowest: '#ffffff'
+  surface-container-low: '#faf2ee'
+  surface-container: '#f4ece8'
+  surface-container-high: '#eee7e3'
+  surface-container-highest: '#e9e1dd'
+  on-surface: '#1e1b19'
+  on-surface-variant: '#434655'
+  inverse-surface: '#33302d'
+  inverse-on-surface: '#f7efeb'
+  outline: '#737686'
+  outline-variant: '#c3c6d7'
+  surface-tint: '#0053db'
+  primary: '#004ac6'
+  on-primary: '#ffffff'
   primary-container: '#2563eb'
   on-primary-container: '#eeefff'
-  inverse-primary: '#0053db'
-  secondary: '#4edea3'
-  on-secondary: '#003824'
-  secondary-container: '#00a572'
-  on-secondary-container: '#00311f'
-  tertiary: '#ffb95f'
-  on-tertiary: '#472a00'
-  tertiary-container: '#996100'
-  on-tertiary-container: '#ffeedd'
-  error: '#ffb4ab'
-  on-error: '#690005'
-  error-container: '#93000a'
-  on-error-container: '#ffdad6'
+  inverse-primary: '#b4c5ff'
+  secondary: '#855300'
+  on-secondary: '#ffffff'
+  secondary-container: '#fea619'
+  on-secondary-container: '#684000'
+  tertiary: '#88411a'
+  on-tertiary: '#ffffff'
+  tertiary-container: '#a65830'
+  on-tertiary-container: '#ffede6'
+  error: '#ba1a1a'
+  on-error: '#ffffff'
+  error-container: '#ffdad6'
+  on-error-container: '#93000a'
   primary-fixed: '#dbe1ff'
   primary-fixed-dim: '#b4c5ff'
   on-primary-fixed: '#00174b'
   on-primary-fixed-variant: '#003ea8'
-  secondary-fixed: '#6ffbbe'
-  secondary-fixed-dim: '#4edea3'
-  on-secondary-fixed: '#002113'
-  on-secondary-fixed-variant: '#005236'
-  tertiary-fixed: '#ffddb8'
-  tertiary-fixed-dim: '#ffb95f'
-  on-tertiary-fixed: '#2a1700'
-  on-tertiary-fixed-variant: '#653e00'
-  background: '#051424'
-  on-background: '#d4e4fa'
-  surface-variant: '#273647'
+  secondary-fixed: '#ffddb8'
+  secondary-fixed-dim: '#ffb95f'
+  on-secondary-fixed: '#2a1700'
+  on-secondary-fixed-variant: '#653e00'
+  tertiary-fixed: '#ffdbcc'
+  tertiary-fixed-dim: '#ffb693'
+  on-tertiary-fixed: '#351000'
+  on-tertiary-fixed-variant: '#76330d'
+  background: '#fff8f5'
+  on-background: '#1e1b19'
+  surface-variant: '#e9e1dd'
 typography:
+  display:
+    fontFamily: Inter
+    fontSize: 40px
+    fontWeight: '700'
+    lineHeight: 48px
+    letterSpacing: -0.02em
+  display-mobile:
+    fontFamily: Inter
+    fontSize: 32px
+    fontWeight: '700'
+    lineHeight: 40px
+    letterSpacing: -0.015em
   headline-lg:
     fontFamily: Inter
     fontSize: 30px
-    fontWeight: '700'
+    fontWeight: '600'
     lineHeight: 38px
-    letterSpacing: -0.02em
-  headline-md:
+    letterSpacing: -0.015em
+  headline-lg-mobile:
     fontFamily: Inter
     fontSize: 24px
     fontWeight: '600'
     lineHeight: 32px
-    letterSpacing: -0.015em
+    letterSpacing: -0.01em
+  headline-md:
+    fontFamily: Inter
+    fontSize: 22px
+    fontWeight: '600'
+    lineHeight: 30px
+    letterSpacing: -0.01em
   headline-sm:
     fontFamily: Inter
-    fontSize: 20px
+    fontSize: 18px
     fontWeight: '600'
     lineHeight: 26px
-    letterSpacing: -0.01em
-  title-md:
-    fontFamily: Inter
-    fontSize: 16px
-    fontWeight: '600'
-    lineHeight: 22px
-    letterSpacing: -0.005em
-  title-sm:
-    fontFamily: Inter
-    fontSize: 14px
-    fontWeight: '600'
-    lineHeight: 20px
     letterSpacing: 0em
   body-lg:
+    fontFamily: Inter
+    fontSize: 18px
+    fontWeight: '400'
+    lineHeight: 28px
+    letterSpacing: 0em
+  body-md:
     fontFamily: Inter
     fontSize: 16px
     fontWeight: '400'
     lineHeight: 24px
     letterSpacing: 0em
-  body-md:
+  body-sm:
     fontFamily: Inter
     fontSize: 14px
     fontWeight: '400'
     lineHeight: 20px
-    letterSpacing: 0em
-  body-sm:
-    fontFamily: Inter
-    fontSize: 12px
-    fontWeight: '400'
-    lineHeight: 16px
-    letterSpacing: 0.01em
+    letterSpacing: 0.005em
   label-lg:
     fontFamily: Inter
     fontSize: 14px
-    fontWeight: '500'
+    fontWeight: '600'
     lineHeight: 20px
     letterSpacing: 0.01em
   label-md:
     fontFamily: Inter
     fontSize: 12px
-    fontWeight: '500'
+    fontWeight: '600'
     lineHeight: 16px
     letterSpacing: 0.02em
-  label-sm:
+  caption:
     fontFamily: Inter
-    fontSize: 11px
-    fontWeight: '600'
-    lineHeight: 14px
-    letterSpacing: 0.04em
+    fontSize: 12px
+    fontWeight: '400'
+    lineHeight: 16px
+    letterSpacing: 0.01em
 rounded:
   sm: 0.25rem
   DEFAULT: 0.5rem
@@ -123,109 +129,96 @@ rounded:
   xl: 1.5rem
   full: 9999px
 spacing:
-  gutter: 1rem
-  margin: 1rem
+  gutter: 1.5rem
+  gutter-mobile: 1rem
+  margin: 2rem
+  margin-mobile: 1rem
   space-xs: 0.25rem
   space-sm: 0.5rem
-  space-md: 0.75rem
-  space-lg: 1rem
-  space-xl: 1.5rem
+  space-md: 1rem
+  space-lg: 1.5rem
+  space-xl: 2rem
+  space-2xl: 3rem
 ---
 
 ## Brand & Style
 
-This design system delivers a focused, utilitarian, and high-legibility dark interface tailored for academic planning, timetable management, and institutional workflows on Android. Engineered specifically for concentrated educational sessions and dense scheduling, the design language rejects distracting neon glows, saturated cyan highlights, or heavy glassmorphism in favor of a restrained, matte-slate aesthetic.
+The design system is centered on the concept of tactile, analog study tools translated into modern digital architecture. Designed for focused students, educators, and researchers, the interface evokes the feeling of premium heavy-stock parchment, archival notebooks, and distraction-free study environments. 
 
-Key brand attributes:
-- **Discipline & Clarity:** Academic information takes immediate precedence. Visual noise is stripped down so that course schedules, attendance states, and conflict alerts are parseable at a glance under harsh or low-light conditions.
-- **Architectural & Grounded:** Rooted in deep slate tones with crisp structural borders, evoking precision, dependability, and academic rigor.
-- **Calm Authority:** Status signals are distinct and purposeful, preventing cognitive fatigue during prolonged operational use.
+The aesthetic fuses modern editorial clarity with subtle warm minimalism. By eschewing sterile, ultra-cold digital white space in favor of a comforting, sepia-adjacent paper canvas, the system lowers cognitive load and reduces eye fatigue during extended study sessions. Functional elements use crisp, deliberate hierarchy, grounded geometry, and tactile surface separation rather than aggressive digital effects or novelty visuals.
 
 ## Colors
 
-The palette establishes strict contrast hierarchy through layered matte surfaces rather than lighting effects or decorative gradients.
+The palette establishes an organic, warm-reading baseline anchored by high-contrast typographic clarity:
 
-### Core Surfaces
-- **Global Canvas / Surface Dim:** `#0B0F17` — Deep neutral slate base. Strictly zero saturated navy tinting or chromatic aberration.
-- **Surface Container Low:** `#111827` — Recessed zones, empty slate placeholders, and grouped list backings.
-- **Surface / Card Surface:** `#161F30` — Primary matte elevated surface for scheduling tiles, cards, and bottom sheets.
-- **Surface Container High:** `#1E293B` — Active elevated headers, floating dialog surfaces, and dropdown layers.
-- **Structural Stroke:** `#26334D` — Uniform 1px border applied to containers and card dividers to preserve separation against `#0B0F17`.
-
-### Typography Colors
-- **Text Primary:** `#F8FAFC` — High-contrast white for course titles, time markers, and key headings.
-- **Text Secondary:** `#94A3B8` — Neutral slate gray for meta tags, instructor labels, and structural captions.
-- **Text Disabled:** `#475569` — Low-contrast slate for inactive terms and locked modules.
-
-### Functional & Semantic Accents
-- **Primary Accent:** `#2563EB` (Royal Blue) — Reserved strictly for focused tabs, primary actions, and current-time indicators.
-- **Success / Present:** `#10B981` with container `#064E3B` and border `#047857` (used for verified attendance states such as "Có mặt" and open enrollment periods like "Đang mở").
-- **Danger / Conflict:** `#EF4444` with container `#450A0A` and border `#DC2626` (used for overlapping class schedules, room collisions, and overdue submissions).
-- **Warning / Offline:** `#F59E0B` with container `#451A03` and border `#B45309` (used for pending prerequisites, unconfirmed room assignments, and offline statuses).
+- **Canvas Background (`#FBF6EB`)**: A muted cream paper that sets the foundation for low-glare reading.
+- **Surface Elevation (`#FFFDF7`)**: A soft warm ivory used for elevated cards and modals. Never use sterile pure white (`#FFFFFF`).
+- **Primary Text (`#1C1917`)**: Deep espresso ink delivering WCAG AAA contrast (exceeding 12:1 against canvas and cards).
+- **Secondary Text (`#78716C`)**: Warm stone muted brown-gray for metadata, captions, and structural hints (exceeding 4.5:1 against surfaces).
+- **Primary Accent (`#2563EB`)**: Royal Blue for explicit interactive cues, primary calls-to-action, focus halos, and active navigation indicators.
+- **Warning & Highlight (`#F59E0B` / `#FEF3C7`)**: Amber tones for status tags, reminders, and alerts, paired strictly with deep amber text (`#78350F`) for compliant readability.
+- **Structural Border (`#EAE1D0`)**: A warm, sand-tinted line token applied at 1px thickness without dashed or dotted treatments.
 
 ## Typography
 
-Typography is powered entirely by **Inter**, leveraging its tall x-height, neutral geometric forms, and high legibility for dense technical interfaces.
+Inter provides clear, neutral letterforms engineered for dense informational layouts, timelines, and long-form study modules. 
 
-- **Tabular Figures:** Timetable hours, room codes, credit counts, and numerical dates must be rendered using tabular numerical variants (`font-feature-settings: "tnum" on, "cv05" on`) to maintain column vertical alignment across schedule timelines.
-- **Visual Hierarchy:** Headlines use tighter tracking (`-0.02em` to `-0.01em`) to maintain solidity in tight Android layouts. Status tags and micro metadata utilize `label-sm` with tracked uppercase letters (`+0.04em`) to remain sharp against dark semantic containers.
+All headings feature tightened letter-spacing (`-0.01em` to `-0.02em`) to maintain an authoritative, editorial density reminiscent of printed texts. Body copy uses relaxed, open line-heights (1.5x to 1.55x) to facilitate continuous reading on amber-tinted backdrops without visual crowding. Numeric data, schedules, and grade breakdowns should utilize tabular numbers (`font-variant-numeric: tabular-nums`) to ensure vertical alignment across data lists.
 
 ## Layout & Spacing
 
-Targeted at Android devices with a base canvas of 360 × 800 dp, layout metrics respect standard Material Design 3 4dp/8dp spatial increments.
+The layout is built upon an 8pt rhythmic grid within a 12-column fluid framework on desktop (max width: 1280px) and a 4-column system on mobile viewports.
 
-### Grid & Density Rules
-- **Canvas Margins:** Fixed 16dp (`1rem`) on horizontal edges to maximize usable surface on standard 360dp screens.
-- **Gutter:** 16dp (`1rem`) between card grids or timetable columns.
-- **Timetable Track:** Vertical agenda lists use a rigid 8dp baseline grid. Schedule blocks match duration heights with strict min-height boundaries (e.g., 48dp per 45-minute lecture slot) to prevent label clipping.
-- **Safe Areas:** 48dp minimum bottom navigation clearing; top app bars conform to a 56dp single-row or 96dp extended collapsible height.
+- **Desktop (>= 1024px)**: Uses 24px (`1.5rem`) gutters and 32px (`2rem`) outer canvas margins. Multi-column cards and schedules align to 12 columns with relaxed breathing room.
+- **Tablet (768px - 1023px)**: Transitions to 8 columns with 16px gutters and 24px margins. Sidebar panels collapse into accessible off-canvas drawers.
+- **Mobile (< 768px)**: 4 columns with 16px gutters and 16px margins. Cards span full width, with content-first stacking. All touch targets strictly maintain a minimum boundary of 48×48px.
 
 ## Elevation & Depth
 
-This system intentionally eliminates blurred drop shadows, ambient glow halos, and diffuse lighting. Elevation is conveyed strictly through **tonal stacking** and **crisp 1px boundary strokes**.
+Visual hierarchy does not use deep synthetic drop shadows or stark elevation scales. Instead, it relies on low-amplitude warm ambient depth paired with continuous border definitions.
 
-1. **Base Tier (0dp):** Global background `#0B0F17`.
-2. **Structural Tier 1 (Cards, Modules, Schedule Blocks):** Surface `#161F30` outlined with a solid `1px solid #26334D`. No shadow.
-3. **Elevated Tier 2 (Bottom Sheets, Popovers, Modals):** Surface Container High `#1E293B` bounded by `1px solid #334155`. Accompanied by a 60% opacity `#000000` scrim for full focus trapping.
-4. **Dividers & Insets:** Hairline `1px` lines tinted with `#1F293D` inside cards to compartmentalize lecture time, instructor name, and room locations without breaking structural unity.
+- **Base Canvas (Level 0)**: `#FBF6EB`, non-elevated flat canvas.
+- **Card / Surface (Level 1)**: `#FFFDF7`, framed by a solid `1px solid #EAE1D0` border and an ambient warm shadow: `0 2px 8px -2px rgba(120, 113, 108, 0.08), 0 1px 3px 0 rgba(120, 113, 108, 0.04)`.
+- **Flyout / Dropdown (Level 2)**: `#FFFDF7`, bordered by `#EAE1D0`, elevated with `0 8px 16px -4px rgba(120, 113, 108, 0.12), 0 2px 6px -1px rgba(120, 113, 108, 0.06)`.
+- **Modal / Overlay Dialog (Level 3)**: `#FFFDF7`, elevated with `0 16px 32px -8px rgba(28, 25, 23, 0.14)`, centered over a semi-translucent warm backdrop scrim: `rgba(28, 25, 23, 0.40)`.
 
 ## Shapes
 
-The shape hierarchy establishes clear tactile differentiation across card blocks, clickable controls, and informative chips:
+The geometric signature uses a unified corner radius of 16px (`1rem`) on all primary containers, course blocks, and modal surfaces to evoke soft-bound notebook corners. 
 
-- **Schedule Cards & Content Modules:** `16px` (`rounded-2xl`). This softens large content boxes on the 360dp canvas without sacrificing edge efficiency.
-- **Buttons, Inputs, & Form Fields:** `12px` (`rounded-xl`). Matches the interactive touch targets while remaining visually distinct from the larger structural cards.
-- **Status Badges, Filter Chips, & Pills:** `9999px` (`rounded-full`). Unambiguously tags contextual states (attendance, credit chips, open badges) as metadata rather than tappable cards.
+Secondary interactive controls (buttons, input fields, selector chips) adopt an 8px (`0.5rem`) radius to preserve functional boundary precision. Status badges, tags, and small pill indicators employ fully rounded radiuses (9999px) to establish visual contrast against structural cards.
 
 ## Components
 
 ### Buttons
-- **Primary Button:** `#2563EB` background with `#F8FAFC` label (`label-lg`). Height: 48dp, corner radius: 12dp. Pressed state shifts to `#1D4ED8`. Never use outer drop shadows.
-- **Secondary / Surface Button:** `#161F30` background with `1px solid #26334D`, `#F8FAFC` label. Pressed state transitions to `#1E293B`.
-- **Destructive Action:** `#450A0A` background with `1px solid #DC2626` and `#EF4444` label.
+- **Primary**: Solid Royal Blue (`#2563EB`) fill with white (`#FFFFFF`) text. Height: 48px min. Padding: 0 20px. Border radius: 8px. Hover state: `#1D4ED8`. Focus outline: 2px solid `#2563EB` with 2px offset.
+- **Secondary**: Surface fill (`#FFFDF7`) with 1px solid `#EAE1D0` border. Text color: `#1C1917`. Hover: `#FBF6EB`.
+- **Tertiary / Ghost**: Transparent background, `#1C1917` text. Hover: `#F2EAD8` background.
 
-### Academic Cards & Schedule Modules
-- **Container:** `#161F30` background with `1px solid #26334D` and 16dp rounded corners.
-- **Left Accent Indicator:** For current or conflicting courses, include an internal 4dp solid left edge bar (`#2563EB` for active session, `#EF4444` for schedule conflict).
-- **Padding:** 12dp vertical, 16dp horizontal to preserve screen space while maintaining touch comfort.
+### Cards
+- Surface: `#FFFDF7`.
+- Border: 1px solid `#EAE1D0` (continuous line; never dashed or broken).
+- Border Radius: 16px.
+- Internal Padding: 20px on mobile, 24px on desktop.
+- Shadow: Level 1 warm ambient shadow.
 
-### Status Chips & Badges
-- **Present / Open ("Có mặt" / "Đang mở"):** Container `#064E3B`, border `1px solid #047857`, label `#10B981` (`label-sm`).
-- **Conflict / Urgent:** Container `#450A0A`, border `1px solid #DC2626`, label `#EF4444` (`label-sm`).
-- **Pending / Offline:** Container `#451A03`, border `1px solid #B45309`, label `#F59E0B` (`label-sm`).
-- **Shape:** Fully rounded pills (`rounded-full`) with 4dp vertical and 10dp horizontal internal padding.
+### Form Inputs
+- Height: 48px minimum.
+- Background: `#FFFDF7`.
+- Border: 1px solid `#EAE1D0`. Radius: 8px.
+- Text: `#1C1917` (Inter 16px). Placeholder: `#78716C`.
+- Focus: 1px solid `#2563EB` with an external `0 0 0 3px rgba(37, 99, 235, 0.15)` focus ring.
 
-### Input Fields & Selectors
-- **Container:** `#111827` surface background, 12dp corner radius, 48dp height.
-- **Resting Border:** `1px solid #26334D`.
-- **Focused State:** `1px solid #2563EB` with an optional 1px outer stroke in `#2563EB` (no diffuse blur).
-- **Text:** Input text `#F8FAFC`, placeholder `#475569`.
+### Chips & Badges
+- **Academic Tags / Chips**: Height: 32px. Radius: 9999px. Background: `#F2EAD8`, Text: `#1C1917`, Border: 1px solid `#EAE1D0`.
+- **Warning / Alert Chip**: Background: `#FEF3C7`, Text: `#78350F`, Border: 1px solid `#FDE68A`.
 
-### Selection Controls (Checkbox & Radio)
-- **Unchecked:** 20×20dp box/circle, `#111827` fill with `2px solid #334155`.
-- **Checked:** Filled `#2563EB` with `#F8FAFC` checkmark icon or center dot. Radius: 6dp for checkbox, 9999px for radio.
+### Selection Controls (Checkboxes & Radios)
+- Dimensions: 20×20px inside a 48×48px interactive touch area.
+- Unchecked: Background `#FFFDF7`, border 1.5px solid `#78716C`, radius 4px (checkbox) or 50% (radio).
+- Checked: Background `#2563EB`, border `#2563EB`, checkmark/indicator in `#FFFFFF`.
 
-### Bottom Navigation Bar (Android M3)
-- **Container:** `#0B0F17` background with a continuous top border of `1px solid #1E293B`. Height: 64dp.
-- **Active Tab:** Icon and text colored `#2563EB` sitting above an optional muted pill indicator (`#161F30`).
-- **Inactive Tab:** Icon and text colored `#94A3B8`.
+### List Items & Schedule Cells
+- Multi-row items bounded by 1px bottom border `#EAE1D0`.
+- Padding: 16px vertical, 12px horizontal.
+- Hover: Soft highlight tint `#F5EEDB`.

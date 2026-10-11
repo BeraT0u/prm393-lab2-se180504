@@ -1,20 +1,38 @@
-# Handoff 2 — EduPlan Mobile (Flutter) — DoodlePad Edition
+# Handoff 2 — EduPlan Mobile (Flutter) — Warm Paper Academic Edition
 
-Đặc tả kỹ thuật giao diện dành cho lập trình viên Flutter, chuyển giao trực tiếp từ thiết kế Figma & Google Stitch.
+Tài liệu đặc tả kỹ thuật giao diện dành cho lập trình viên Flutter, chuyển giao trực tiếp từ thiết kế Figma & Google Stitch.
 
 | Thông số | Giá trị chuẩn |
 | --- | --- |
-| Màn hình chuẩn | 360 × 800 dp (Android Mobile) |
-| Design System | Material Design 3 (Custom DoodlePad Academic System) |
-| Theme Mode | Warm Paper / Cozy Cream (Tối ưu chống mỏi mắt thiếu sáng) |
-| Typography | Inter (Hỗ trợ 100% dấu tiếng Việt, không lỗi chân chữ) |
-| Quy chuẩn màn hình | 9 màn hình (SCR-01 đến SCR-08, bao gồm SCR-06A & SCR-06B) |
+| Màn hình chuẩn | **390 × 800 dp** (Android Mobile — Đã thống nhất & duyệt đồng bộ) |
+| Design System | Material Design 3 (Custom Warm Paper Academic System) |
+| Theme Mode | Warm Paper / Cozy Parchment (Giảm độ chói, tối ưu đọc lịch học kéo dài) |
+| Typography | Inter (Hỗ trợ 100% tiếng Việt, Tabular Numbers cho giờ học) |
+| Quy chuẩn màn hình | 9 màn hình chính + 3 biến thể State + 1 Modal Overlay + 1 Intermediate Loading |
+
+---
 
 ## Mục lục
 
-- Phần 1 — Bảng ánh xạ Design Tokens sang Flutter
-- Phần 2 — Đặc tả chi tiết 9 màn hình
-- Phần 3 — Responsive (width ≥ 600 dp) & Checklist UI
+- [Phần 1 — Bảng ánh xạ Design Tokens sang Flutter](#phần-1--bảng-ánh-xạ-design-tokens-sang-flutter)
+  - [1.1. Bảng màu (ColorScheme)](#11-bảng-màu-colorscheme)
+  - [1.2. Kiểu chữ (TextTheme - Font Inter)](#12-kiểu-chữ-texttheme---font-inter)
+  - [1.3. Spacing, Border Radius & Elevation](#13-spacing-border-radius--elevation)
+  - [1.4. Bảng ánh xạ Component sang Flutter Widget](#14-bảng-ánh-xạ-component-sang-flutter-widget)
+- [Phần 2 — Đặc tả chi tiết các màn hình & States](#phần-2--đặc-tả-chi-tiết-các-màn-hình--states)
+  - [2.0. Tổng quan luồng điều hướng (Navigation Architecture)](#20-tổng-quan-luồng-điều-hướng-navigation-architecture)
+  - [2.1. SCR-01 — Login Screen & SCR-01_Loading](#21-scr-01--login-screen--scr-01_loading)
+  - [2.2. SCR-02 — Home Dashboard](#22-scr-02--home-dashboard)
+  - [2.3. SCR-03 — Weekly Schedule & Trạng thái Ngoại tuyến](#23-scr-03--weekly-schedule--trạng-thái-ngoại-tuyến)
+  - [2.4. SCR-04 — Course Catalog, Loading & Empty State](#24-scr-04--course-catalog-loading--empty-state)
+  - [2.5. SCR-05 — Course Detail (Chi tiết môn & Chọn lớp)](#25-scr-05--course-detail-chi-tiết-môn--chọn-lớp)
+  - [2.6. SCR-06A — Plan Builder Grid (Lưới tuần & Báo động trùng)](#26-scr-06a--plan-builder-grid-lưới-tuần--báo-động-trùng)
+  - [2.7. SCR-06B — Selected Courses & SCR-06B_Resolved (Khắc phục lỗi)](#27-scr-06b--selected-courses--scr-06b_resolved-khắc-phục-lỗi)
+  - [2.8. SCR-07 — Semester Summary & Export PDF](#28-scr-07--semester-summary--export-pdf)
+  - [2.9. SCR-08 — Profile & Settings & Overlay_Logout](#29-scr-08--profile--settings--overlay_logout)
+- [Phần 3 — Responsive (width ≥ 600 dp) & Checklist QA](#phần-3--responsive-width--600-dp--checklist-qa)
+
+---
 
 ## Phần 1 — Bảng ánh xạ Design Tokens sang Flutter
 
@@ -22,248 +40,371 @@
 
 ```dart
 // lib/theme/app_colors.dart
+import 'package:flutter/material.dart';
+
 class AppColors {
   // Nền canvas giấy kem ấm & thẻ ngà ấm
-  static const Color warmCreamBg       = Color(0xFFFAF7F2); // Nền tổng thể Scaffold
-  static const Color softIvorySurface   = Color(0xFFFFFDF7); // Bề mặt Card, Sheet, App Bar
-  static const Color solidBorder        = Color(0xFFEAE1D0); // Viền 1px nét liền quanh Card
-  
-  // Màu thương hiệu & Hành động chính
+  static const Color canvasBg          = Color(0xFFFBF6EB); // Nền tổng thể Scaffold
+  static const Color surfaceCard        = Color(0xFFFFFDF7); // Bề mặt Card, Sheet, App Bar
+  static const Color surfaceLowest      = Color(0xFFFFFFFF); // Nền trắng input text
+  static const Color borderStructural   = Color(0xFFEAE1D0); // Viền 1px nét liền quanh Card
+
+  // Màu thương hiệu & Hành động chính (Royal Blue)
   static const Color primaryBlue        = Color(0xFF2563EB); // Nút CTA chính, Tab active
-  static const Color primaryBlueTonal   = Color(0xFFEFF6FF); // Nền nút phụ, chip chọn lớp
+  static const Color primaryBluePressed = Color(0xFF1D4ED8); // Trạng thái nhấn nút
+  static const Color primaryBlueTonal   = Color(0xFFDBE1FF); // Nền chip/tag nổi bật
   static const Color onPrimaryWhite     = Color(0xFFFFFFFF);
-  
+
   // Màu văn bản (Độ tương phản cao trên nền kem)
-  static const Color textPrimary        = Color(0xFF1C1917); // Deep Espresso (Tiêu đề, tên môn)
-  static const Color textSecondary      = Color(0xFF64748B); // Slate Muted (Giảng viên, ca học)
-  static const Color textDisabled       = Color(0xFF94A3B8);
-  
-  // Trạng thái & Tiếp cận (WCAG AAA)
-  static const Color badgeAmberSurface  = Color(0xFFFEF3C7); // Nền nút "Hôm nay"
-  static const Color badgeAmberBorder   = Color(0xFFF59E0B);
-  static const Color badgeAmberText     = Color(0xFF78350F); // Chữ nâu đậm (Tương phản 7.2:1)
-  
-  // Cảnh báo trùng ca & Lỗi
-  static const Color errorRedSurface    = Color(0xFFFEE2E2); // Nền banner cảnh báo trùng
-  static const Color errorRedBorder     = Color(0xFFDC2626); // Viền đỏ, icon ⚠️
-  static const Color errorRedText       = Color(0xFFB91C1C);
-  
-  // Thành công & Hoàn thành
-  static const Color successGreen       = Color(0xFF16A34A);
-  static const Color successGreenBg     = Color(0xFFDCFCE7);
+  static const Color textPrimary        = Color(0xFF1C1917); // Deep Espresso Ink (Tiêu đề, tên môn)
+  static const Color textSecondary      = Color(0xFF78716C); // Warm Slate Muted (Giảng viên, ca học)
+  static const Color textDisabled       = Color(0xFF94A3B8); // Chữ khi control bị khóa
+
+  // Trạng thái & Tiếp cận: Cảnh báo trùng ca & Lỗi
+  static const Color dangerSurface      = Color(0xFFFEE2E2); // Nền banner báo trùng, ô lưới lỗi
+  static const Color dangerBorder       = Color(0xFFDC2626); // Viền đỏ báo động, icon ⚠️
+  static const Color dangerText         = Color(0xFFB91C1C); // Chữ đỏ thông báo lỗi
+
+  // Trạng thái: Chờ, Nhắc nhở & Chip "Hôm nay"
+  static const Color warningSurface     = Color(0xFFFEF3C7); // Nền tag "Đang học", nút Hôm nay
+  static const Color warningBorder      = Color(0xFFFDE68A);
+  static const Color warningText        = Color(0xFF78350F); // Chữ nâu đậm (WCAG AAA >= 7:1)
+
+  // Trạng thái: Thành công & Hợp lệ
+  static const Color successSurface     = Color(0xFFDCFCE7); // Nền xác nhận hợp lệ
+  static const Color successBorder      = Color(0xFF16A34A);
+  static const Color successText        = Color(0xFF15803D); // Chữ trạng thái kế hoạch hợp lệ
 }
 ```
 
 **Ánh xạ vào `ThemeData.colorScheme`:**
 
-| `colorScheme` token | Ánh xạ |
-| --- | --- |
-| `colorScheme.surface` | `AppColors.warmCreamBg` |
-| `colorScheme.surfaceContainer` | `AppColors.softIvorySurface` |
-| `colorScheme.outlineVariant` | `AppColors.solidBorder` |
-| `colorScheme.primary` | `AppColors.primaryBlue` |
-| `colorScheme.onSurface` | `AppColors.textPrimary` |
-| `colorScheme.onSurfaceVariant` | `AppColors.textSecondary` |
-| `colorScheme.error` | `AppColors.errorRedBorder` |
+| colorScheme token | Ánh xạ hằng số Flutter | Vai trò trong hệ thống |
+| --- | --- | --- |
+| `colorScheme.surface` | `AppColors.canvasBg` | Nền Scaffold toàn app |
+| `colorScheme.surfaceContainer` | `AppColors.surfaceCard` | Nền thẻ môn học, dialog, bottom bar |
+| `colorScheme.surfaceContainerLowest` | `AppColors.surfaceLowest` | Nền ô nhập liệu search bar |
+| `colorScheme.outlineVariant` | `AppColors.borderStructural` | Viền hairline 1px solid của mọi thẻ |
+| `colorScheme.primary` | `AppColors.primaryBlue` | Màu nút chính, tab active, link chuyển tiếp |
+| `colorScheme.onPrimary` | `AppColors.onPrimaryWhite` | Chữ trắng trên nền nút xanh |
+| `colorScheme.onSurface` | `AppColors.textPrimary` | Tiêu đề, tên môn (tương phản >12:1) |
+| `colorScheme.onSurfaceVariant` | `AppColors.textSecondary` | Giảng viên, phòng học, chú thích phụ |
+| `colorScheme.error` | `AppColors.dangerBorder` | Viền đỏ lỗi, viền ô trùng ca |
+| `colorScheme.errorContainer` | `AppColors.dangerSurface` | Nền ô Ca 2 Thứ 3 bị trùng lịch |
 
 ### 1.2. Kiểu chữ (TextTheme - Font Inter)
 
 ```dart
 // lib/theme/app_typography.dart
+import 'package:flutter/material.dart';
+import 'app_colors.dart';
+
 final TextTheme appTextTheme = TextTheme(
-  displaySmall: TextStyle(fontFamily: 'Inter', fontSize: 28, fontWeight: FontWeight.bold, height: 1.2, color: AppColors.textPrimary),
-  headlineMedium: TextStyle(fontFamily: 'Inter', fontSize: 20, fontWeight: FontWeight.w600, height: 1.3, color: AppColors.textPrimary),
-  headlineSmall: TextStyle(fontFamily: 'Inter', fontSize: 18, fontWeight: FontWeight.w600, height: 1.3, color: AppColors.textPrimary),
-  titleMedium: TextStyle(fontFamily: 'Inter', fontSize: 16, fontWeight: FontWeight.w600, height: 1.4, color: AppColors.textPrimary),
-  bodyMedium: TextStyle(fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.normal, height: 1.4, color: AppColors.textPrimary),
-  labelLarge: TextStyle(fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w600, height: 1.4, color: AppColors.onPrimaryWhite),
-  labelMedium: TextStyle(fontFamily: 'Inter', fontSize: 12, fontWeight: FontWeight.w600, height: 1.3, color: AppColors.textSecondary),
-  labelSmall: TextStyle(fontFamily: 'Inter', fontSize: 11, fontWeight: FontWeight.w500, height: 1.4, color: AppColors.textSecondary),
+  headlineLarge: TextStyle(
+    fontFamily: 'Inter', fontSize: 24, fontWeight: FontWeight.bold, height: 1.3,
+    letterSpacing: -0.015, color: AppColors.textPrimary,
+  ),
+  headlineMedium: TextStyle(
+    fontFamily: 'Inter', fontSize: 20, fontWeight: FontWeight.w600, height: 1.3,
+    letterSpacing: -0.01, color: AppColors.textPrimary,
+  ),
+  titleMedium: TextStyle(
+    fontFamily: 'Inter', fontSize: 16, fontWeight: FontWeight.w600, height: 1.4,
+    color: AppColors.textPrimary,
+  ),
+  bodyLarge: TextStyle(
+    fontFamily: 'Inter', fontSize: 16, fontWeight: FontWeight.normal, height: 1.5,
+    color: AppColors.textPrimary,
+  ),
+  bodyMedium: TextStyle(
+    fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.normal, height: 1.4,
+    color: AppColors.textPrimary, // Tối thiểu 14sp theo chuẩn WCAG
+  ),
+  bodySmall: TextStyle(
+    fontFamily: 'Inter', fontSize: 12, fontWeight: FontWeight.normal, height: 1.3,
+    color: AppColors.textSecondary,
+  ),
+  labelLarge: TextStyle(
+    fontFamily: 'Inter', fontSize: 14, fontWeight: FontWeight.w600, height: 1.4,
+    color: AppColors.onPrimaryWhite,
+  ),
+  labelMedium: TextStyle(
+    fontFamily: 'Inter', fontSize: 12, fontWeight: FontWeight.w600, height: 1.3,
+    color: AppColors.textSecondary,
+  ),
+  labelSmall: TextStyle(
+    fontFamily: 'Inter', fontSize: 11, fontWeight: FontWeight.w600, height: 1.2,
+    letterSpacing: 0.04, color: AppColors.textSecondary,
+  ),
+);
+
+// Tabular numbers cho giờ học và mã phòng
+const TextStyle tabularNumberStyle = TextStyle(
+  fontFamily: 'Inter',
+  fontFeatures: [FontFeature.tabularFigures()],
 );
 ```
 
-### 1.3. Spacing & Border Radius
+### 1.3. Spacing, Border Radius & Elevation
 
 ```dart
+// lib/theme/app_dimens.dart
 class AppSpacing {
-  static const double xs = 4.0;
-  static const double sm = 8.0;
-  static const double md = 12.0;
-  static const double lg = 16.0;
-  static const double xl = 24.0;
+  static const double xs  = 4.0;
+  static const double sm  = 8.0;
+  static const double md  = 12.0;
+  static const double lg  = 16.0;  // Padding ngang chuẩn của màn hình 390dp
+  static const double xl  = 24.0;
   static const double xxl = 32.0;
-  static const double bottomClearance = 96.0; // Khoảng đệm tránh bị Bottom Bar đè
+
+  static const double bottomClearanceWithBar    = 96.0;  // Tránh bị Bottom Bar 64dp đè
+  static const double bottomClearanceDockedBtn  = 110.0; // Tránh bị Footer Button đè
 }
 
 class AppRadius {
-  static const double sm = 8.0;     // Input search, tag con
-  static const double md = 12.0;    // Nút bấm, filter chips
-  static const double lg = 16.0;    // Card môn học, banner, dialog
-  static const double pill = 999.0;  // Avatar, badge trạng thái
+  static const double control = 8.0;   // Nút bấm, TextField, tag nhỏ
+  static const double card    = 16.0;  // Thẻ môn học, Modal Bottom Sheet, Dialog
+  static const double pill    = 999.0; // Status chip, badge, avatar
+}
+
+class AppElevation {
+  // Hệ thống hoàn toàn không dùng drop shadow mờ ảo, dùng border 1px làm phân tách
+  static const Border sideBorder = Border.fromBorderSide(
+    BorderSide(color: AppColors.borderStructural, width: 1.0),
+  );
 }
 ```
 
-### 1.4. Thành phần tái sử dụng (Shared Components)
+### 1.4. Bảng ánh xạ Component sang Flutter Widget
 
-| Tên Component | Widget Flutter | Thông số bắt buộc |
+| Tên Component (Design) | Widget Flutter chuẩn | Variants / States hỗ trợ |
 | --- | --- | --- |
-| EduPlan Master Logo | Widget `EduPlanLogoHeader()` | Hiển thị icon sổ tay gáy xanh + chữ "EduPlan" (Inter Bold) |
-| Master Avatar | `CircleAvatar` | Bán kính 16dp (kích thước 32×32 dp), ảnh minh họa sinh viên Long, viền 1px #EAE1D0 |
-| Primary Button | `FilledButton` | Cao tối thiểu 48–52 dp, bo góc 12dp, nền #2563EB |
-| Tonal Button | `OutlinedButton` | Cao 40 dp (touch target 48 dp), nền #EFF6FF, viền #BFDBFE, chữ #1D4ED8 |
-| Navigation Bar | `NavigationBar` | 4 tab: [Trang chủ, Lịch học, Tìm môn, Cá nhân], cao 64 dp, nền #FFFDF7 |
+| Button | `FilledButton` / `OutlinedButton` | Default, Pressed, Disabled, Loading (với Spinner) |
+| Destructive Button | `FilledButton` (Nền đỏ) | Dùng cho hành động Đăng xuất hoặc Hủy môn |
+| Text Field / Search | `TextFormField` / `SearchBar` | Default, Focused (viền xanh), Filled, Error, Disabled |
+| Course Card | `Container` bọc `InkWell` | Default, Pressed, Conflict (viền đỏ + tag ⚠️) |
+| Navigation Bar | `NavigationBar` (M3) | 4 Destinations, mỗi tab có variant Active / Inactive |
+| Top App Bar | `AppBar` | Back Button 48dp, Title, Action icons |
+| Modal Dialog | `AlertDialog` / `showGeneralDialog` | Confirm (Hủy/Đồng ý) và Alert (Cảnh báo trùng/Lỗi) |
+| Loading State | Skeleton / Shimmer | Screen-level skeleton card mờ xám |
+| Empty State | Custom `EmptyStateWidget` | Minh họa + Tiêu đề + Phụ đề + Action Button |
+| Error / Offline State | `MaterialBanner` / Thẻ cảnh báo | Nền đỏ/cam + Icon ⚠️ + Text nguyên nhân + Nút thử lại |
 
-## Phần 2 — Đặc tả chi tiết 9 màn hình
+---
 
-### Tổng quan luồng điều hướng
+## Phần 2 — Đặc tả chi tiết các màn hình & States
 
-| Mã màn hình | Tên màn hình | Phân cấp | Hiển thị Bottom Bar |
-| --- | --- | --- | --- |
-| SCR-01 | Login Screen | Root (Xác thực tài khoản) | ❌ Không |
-| SCR-02 | Home Dashboard | Cấp 1 (Trang chủ) | ✅ Tab Trang chủ |
-| SCR-03 | Weekly Schedule | Cấp 1 (Lịch học) | ✅ Tab Lịch học |
-| SCR-04 | Course Catalog | Cấp 1 (Tìm môn) | ✅ Tab Tìm môn |
-| SCR-05 | Course Detail | Cấp 2 (Chi tiết môn & chọn lớp) | ❌ Ẩn (Dùng Docked Action Footer) |
-| SCR-06A | Plan Builder Grid | Cấp 2 (Lưới xếp lịch thử) | ❌ Ẩn (Luồng Modal Task Flow) |
-| SCR-06B | Selected Courses | Cấp 2 (Quản lý môn đã chọn & sửa lỗi) | ❌ Ẩn (Luồng Modal Task Flow) |
-| SCR-07 | Semester Summary | Cấp 2 (Tổng kết & Xuất PDF) | ✅ Tab Tìm môn (Khôi phục) |
-| SCR-08 | Profile & Settings | Cấp 1 (Cá nhân & Cài đặt) | ✅ Tab Cá nhân |
+### 2.0. Tổng quan luồng điều hướng (Navigation Architecture)
 
-```text
-[ SCR-01 Login ]
-                              │ (Đăng nhập Google thành công)
-                              ▼
-                       [ SCR-02 Home ]
-        ┌─────────────────────┼─────────────────────┐
-        ▼                     ▼                     ▼
- [ SCR-03 Lịch học ]   [ SCR-04 Tìm môn ]    [ SCR-08 Cá nhân ]
-                              │ (Chạm thẻ môn học)
-                              ▼
-                       [ SCR-05 Chi tiết môn ] (Ẩn Bottom Bar)
-                              │ (Bấm "Thêm vào lịch học")
-                              ▼
-                       [ SCR-06A Lưới xếp lịch ] (Ẩn Bottom Bar)
-                              │ (Bấm "Xem danh sách môn ➔")
-                              ▼
-                       [ SCR-06B Môn đã chọn ] (Ẩn Bottom Bar, Đổi ca/Khóa Lưu)
-                              │ (Hết trùng ca + Bấm "Lưu Thời Khóa Biểu")
-                              ▼
-                       [ SCR-07 Tổng kết & Xuất PDF ] (Hiện lại Bottom Bar)
+| Mã màn hình | Tên màn hình | Cấp bậc | Bottom Bar (64dp) | Điểm kết nối điều hướng |
+| --- | --- | --- | --- | --- |
+| SCR-01 | Login Screen | Root | ❌ Ẩn | Chuyển sang SCR-01_Loading ➔ SCR-02 |
+| SCR-02 | Home Dashboard | Cấp 1 | ✅ Tab Trang chủ | Mở SCR-03, SCR-04, SCR-08 |
+| SCR-03 | Weekly Schedule | Cấp 1 | ✅ Tab Lịch học | Có state hiển thị cache Offline |
+| SCR-04 | Course Catalog | Cấp 1 | ✅ Tab Tìm môn | Có Empty State & Skeleton Loading State; mở SCR-05 |
+| SCR-05 | Course Detail | Cấp 2 | ❌ Ẩn | Chọn radio lớp mở ➔ Mở SCR-06A |
+| SCR-06A | Plan Builder Grid | Cấp 2 | ❌ Ẩn | Lưới tuần mô phỏng, phát hiện trùng ➔ Mở SCR-06B |
+| SCR-06B | Selected Courses | Cấp 2 | ❌ Ẩn | Nút Lưu bị khóa ➔ Bấm "Đổi ca" ➔ Mở SCR-05 |
+| SCR-06B_Resolved | Selected Courses (Hết lỗi) | Cấp 2 | ❌ Ẩn | Nút Lưu MỞ KHÓA màu xanh ➔ Mở SCR-07 |
+| SCR-07 | Semester Summary | Cấp 2 | ✅ Khôi phục | Mở Modal xem trước xuất PDF A4 |
+| SCR-08 | Profile & Settings | Cấp 1 | ✅ Tab Cá nhân | Mở SCR-07 qua mục "Chi tiết >"; mở Overlay_Logout |
+| Overlay_Logout | Dialog Xác nhận Đăng xuất | Overlay | N/A | Bấm Hủy (đóng overlay), Bấm Đăng xuất ➔ SCR-01 |
+
+**Sơ đồ luồng điều hướng:**
+
+```mermaid
+flowchart TD
+    login["SCR-01 Login"]
+    loading["SCR-01_Login_Loading"]
+    home["SCR-02 Home"]
+    schedule["SCR-03 Lịch học<br/>(Có banner Offline)"]
+    catalog["SCR-04 Tìm môn<br/>(Có Empty & Skeleton)"]
+    profile["SCR-08 Cá nhân"]
+    detail["SCR-05 Chi tiết môn"]
+    detail2["SCR-05 Chọn lại ca 4"]
+    plan["SCR-06A Lưới tuần<br/>(Báo động đỏ Ca 2 T3 ⚠️)"]
+    selected["SCR-06B Môn đã chọn<br/>(Nút Lưu KHÓA màu xám)"]
+    resolved["SCR-06B_Resolved<br/>(Nút Lưu MỞ KHÓA xanh)"]
+    logout["Overlay_Logout"]
+    backToLogin["Về SCR-01"]
+    summary["SCR-07 Tổng kết học kỳ<br/>& Xuất file PDF (A4)"]
+
+    login -->|Bấm Đăng nhập Google| loading
+    loading -->|After delay 800ms| home
+    home --> schedule
+    home --> catalog
+    home --> profile
+    catalog -->|Chọn môn PRM393| detail
+    profile --> logout
+    profile -->|Chi tiết| summary
+    logout -->|Xác nhận| backToLogin
+    backToLogin --> login
+    detail -->|Thêm vào lịch| plan
+    plan -->|Xem DS môn| selected
+    selected -->|Đổi ca khác| detail2
+    detail2 -->|Chốt ca mới| resolved
+    resolved -->|Lưu Thời Khóa Biểu| summary
 ```
 
-### SCR-01 — Login Screen (Đăng nhập)
+### 2.1. SCR-01 — Login Screen & SCR-01_Loading
 
-- **Layout:** `Scaffold → SafeArea → Padding(16) → Column(mainAxisAlignment: MainAxisAlignment.spaceBetween)` (Không cuộn).
-- **Khối giữa (Hero Centered):** Logo sổ tay DoodlePad (64×64 dp) → Tiêu đề EduPlan (28sp bold) → Slogan "Lên lịch học thật dễ!".
-- **Hộp thông tin đăng nhập:** Nền #FFFDF7, viền nét liền 1px #EAE1D0, bo góc 16dp.
-- **Nút GoogleSignInButton:** Chiều cao 52 dp, nền #FFFFFF, viền #EAE1D0, logo Google SVG + dòng chữ "Đăng nhập bằng Google".
-- **Tương tác:** Nhấn nút → Kích hoạt Firebase Auth SDK → Điều hướng `pushReplacementNamed('/home')` sang SCR-02.
+- **Layout:** `Scaffold(backgroundColor: AppColors.canvasBg)` → `SafeArea` → `Padding(16)` → `Column(mainAxisAlignment: MainAxisAlignment.spaceBetween)`.
+- **Components:**
+  - Master Logo EduPlan (sổ tay gáy xanh, 64×64 dp) + Tiêu đề "EduPlan" (28sp bold) + Slogan "Lên lịch học thật dễ!".
+  - Nút `GoogleSignInButton`: Chiều cao 52 dp, nền `#FFFFFF`, viền `#EAE1D0`, bo góc 8dp, logo Google + text "Đăng nhập bằng Google".
+- **States:**
+  - **Default:** Hiển thị nút đăng nhập sẵn sàng bấm.
+  - **Loading (SCR-01_Login_Loading):** Khi người dùng bấm nút, nút chuyển sang nền xanh hoặc trắng viền xanh với vòng quay `CircularProgressIndicator(strokeWidth: 2.5)` kèm chữ "Đang xác thực Google...".
+- **Interactions & Navigation:** Bấm nút ➔ Kích hoạt trạng thái loading ➔ Sau 800ms (After delay) gọi `Navigator.pushReplacementNamed(context, '/home')` sang SCR-02.
+- **Constraints:** Toàn bộ nội dung căn giữa màn hình theo chiều dọc, không cuộn.
 
-### SCR-02 — Home Dashboard (Trang chủ)
+### 2.2. SCR-02 — Home Dashboard
 
-- **Layout:** `Scaffold → AppBar cố định → RefreshIndicator → SingleChildScrollView(padding: EdgeInsets.fromLTRB(16, 12, 16, 96)) → Column(spacing: 16)`.
-- **Top App Bar:** Logo Master EduPlan + Subtitle "Trang Chủ", chuông thông báo, avatar sinh viên Long (32×32 dp).
-- **Nội dung hiển thị:**
-  - **Banner ngoại tuyến** (chỉ hiện khi mất mạng): Nền #FFFDF7, icon mây offline cam, text "Dữ liệu ngoại tuyến • Đã lưu lúc 09:15", nút refresh 48dp.
-  - **Lời chào:** "Chào buổi sáng ✨ Hoàng Long" kèm chip ngày "Thứ Năm, 24/10".
-  - **Hero Card "Lớp tiếp theo":** Tag xanh "Lớp tiếp theo", thời gian đếm ngược "Bắt đầu trong 25p", môn Lập trình Di động (3 TC), phòng BE-302, nút bấm lớn "Vào lớp" (48dp).
-  - **Lịch học sắp tới:** Danh sách thẻ môn tiếp theo kèm 2 nút xem nhanh: "Điểm danh" và "Sơ đồ phòng".
-- **Tương tác:** Kéo để làm mới (Pull-to-refresh); chạm Hero Card → Mở SCR-05; chạm tab Bottom Bar để chuyển màn hình.
+- **Layout:** `Scaffold` → `AppBar` cố định → `RefreshIndicator` → `SingleChildScrollView(padding: EdgeInsets.fromLTRB(16, 12, 16, 96))` → `Column(spacing: 16)`.
+- **Components:**
+  - Top App Bar: Logo EduPlan + subtitle "Trang Chủ", icon chuông thông báo, Avatar sinh viên Long (32×32 dp, viền `#EAE1D0`).
+  - Hero Card "Lớp tiếp theo": Nền `#FFFDF7`, viền `#EAE1D0`, tag xanh "Lớp tiếp theo", đếm ngược "Bắt đầu trong 25p", môn Lập trình Di động (3 TC), phòng BE-302, nút CTA "Vào lớp" (48dp).
+  - Lịch học sắp tới: Danh sách thẻ slot rút gọn kèm nút "Điểm danh" và "Sơ đồ phòng".
+  - Bottom Navigation Bar (64dp, Tab 1 Trang chủ Active).
+- **States:**
+  - **Populated:** Đầy đủ dữ liệu học tập trong ngày.
+  - **Offline Mode:** Xuất hiện thanh micro-banner màu cam nhạt ngay dưới AppBar: "Dữ liệu ngoại tuyến • Đã lưu lúc 09:15".
+- **Interactions & Navigation:**
+  - Kéo xuống để refresh (Pull-to-refresh).
+  - Chạm Hero Card ➔ Mở SCR-05 Course Detail.
+  - Chạm Bottom Bar ➔ Chuyển sang SCR-03, SCR-04, SCR-08.
 
-### SCR-03 — Weekly Schedule (Thời khóa biểu tuần)
+### 2.3. SCR-03 — Weekly Schedule & Trạng thái Ngoại tuyến
 
-- **Layout:** `Scaffold → AppBar("Lịch Học") cố định → Header cố định (Thanh tuần + Strip 7 ngày) → Expanded → ListView.builder(padding: EdgeInsets.only(bottom: 96))` (Danh sách Slot cuộn dọc).
-- **Thành phần quan trọng:**
-  - **Cụm chọn tuần:** Thanh `< Tháng 10, 2024 (Tuần 8) >` + Nút [Hôm nay] chuẩn WCAG: Nền #FEF3C7, viền #F59E0B, chữ #78350F (tuyệt đối không dùng chữ trắng trên nền vàng).
-  - **Dải ngày (7-day Strip):** Vuốt ngang được; ngày đang chọn (T4, 23) tô nền xanh #2563EB chữ trắng.
-  - **Thẻ Slot học:** Nền #FFFDF7, viền nét liền 1px #EAE1D0. Ca đang học có vạch chỉ báo 4dp màu xanh dương ở mép trái.
+- **Layout:** `Scaffold` → `AppBar("Lịch Học")` → Header cố định (Tuần + Dải 7 ngày) → `Expanded` → `ListView.builder(padding: EdgeInsets.only(bottom: 96))`.
+- **Components:**
+  - Thanh chọn tuần: `< Tháng 10, 2024 (Tuần 8) >` + Nút `[Hôm nay]` (Nền `#FEF3C7`, viền `#FDE68A`, chữ `#78350F`).
+  - Dải 7 ngày (Horizontal swipe): Ngày active tô nền `#2563EB` chữ trắng bo tròn.
+  - Thẻ ca học: Nền `#FFFDF7`, viền `#EAE1D0`. Ca đang diễn ra có vạch chỉ báo xanh 4dp mép trái.
+- **States:**
+  - **Default:** Hiển thị danh sách ca học từ Ca 1 đến Ca 5.
+  - **SCR-03_Offline_Error (Error State):** Banner màu cam/đỏ nhạt nằm dưới Header: "⚠️ Mất kết nối mạng. Đang hiển thị lịch học ngoại tuyến đã lưu." + Nút "Thử lại" (touch target 48dp).
+- **Navigation:** Nút Back `[←]` trên AppBar gọi `Navigator.pop(context)` quay lại màn hình trước.
 
-### SCR-04 — Course Catalog (Tìm & Danh mục môn học)
+### 2.4. SCR-04 — Course Catalog, Loading & Empty State
 
-- **Layout:** `Scaffold → AppBar("Tìm Môn") → Khối tìm kiếm & Filter Chips (cố định) → Expanded → ListView.separated(padding: EdgeInsets.only(bottom: 96))`.
-- **Thành phần quan trọng:**
-  - **SearchBar:** Cao 48 dp, bo góc 12 dp, placeholder "Tìm mã môn hoặc tên môn...".
-  - **Thẻ môn học (Course Card):**
-    - Toàn bộ thân thẻ bọc trong `InkWell` → Chạm vào bất kỳ vị trí nào trên thẻ đều mở SCR-05 Course Detail.
-    - Nút hành động bên phải: Tonal Button nhãn `Xem lớp (3)` (Cao 40 dp, touch target 48 dp) → Mở thẳng SCR-05.
+- **Layout:** `Scaffold` → `AppBar("Tìm Môn")` → SearchBar & Filter Chips cố định → `Expanded` → `ListView.separated(padding: EdgeInsets.only(bottom: 96))`.
+- **Components:**
+  - SearchBar: Cao 48 dp, bo góc 8 dp, nền `#FFFDF7`, placeholder "Tìm mã môn hoặc tên môn...".
+  - Filter Chips: Chuyên ngành, Cơ sở, Tự chọn (ngang, cuộn được).
+  - Thẻ môn học: `InkWell` toàn diện, nút phụ bên phải "Xem lớp (3)" (Cao 40dp, touch target 48dp).
+- **States:**
+  - **Populated:** Danh sách các môn học mở trong học kỳ (PRM393, SWE302, v.v.).
+  - **SCR-04_Loading (Loading State):** Khung Skeleton Shimmer màu xám nhạt `#EAE1D0` thay thế toàn bộ danh sách thẻ môn khi đang fetch dữ liệu.
+  - **SCR-04_Empty (Empty State):** Khi tìm kiếm không có kết quả (VD: gõ "XYZ99"): Cụm Icon kính lúp buồn (48×48 dp) + Text "Không tìm thấy môn học nào" + Phụ đề "Vui lòng thử từ khóa khác" + Nút `OutlinedButton` "Xóa bộ lọc".
+- **Navigation:** Chạm vào bất kỳ vị trí nào trên thẻ môn PRM393 ➔ `Navigator.pushNamed('/course-detail')` sang SCR-05.
 
-### SCR-05 — Course Detail (Chi tiết môn & Chọn lớp)
+### 2.5. SCR-05 — Course Detail (Chi tiết môn & Chọn lớp)
 
-- **Layout:** `Scaffold → AppBar (Nút quay lại ←, logo EduPlan, nút ghim) → SingleChildScrollView(padding: EdgeInsets.only(bottom: 110)) → DockedActionBar (Ghim đáy cố định)`.
+- **Layout:** `Scaffold` → `AppBar(Back [←], Logo EduPlan, Ghim)` → `SingleChildScrollView(padding: EdgeInsets.only(bottom: 110))` → `DockedActionFooter` (cố định đáy).
 - **Quy tắc điều hướng:** ẨN HOÀN TOÀN Bottom Navigation Bar.
-- **Nội dung hiển thị:**
-  - **Thông tin môn:** Lập trình Di động (PRM393), badge "3 Tín chỉ", tag xanh lá "Tiên quyết: Đạt ✅".
-  - **Danh sách Radio chọn lớp mở** (SE1801, SE1802, SE1803): Thẻ đang chọn có viền xanh #2563EB.
-  - **Docked Action Footer:**
-    - Chứa nút yêu thích (Icon Button 48dp) + Nút chính "Thêm vào lịch học" (FilledButton cao 52dp).
-    - Bọc trong `SafeArea(bottom: true)` với padding đáy 16dp.
-- **Tương tác:** Chọn radio SE1801 → Nhấn "Thêm vào lịch học" → `Navigator.pushNamed('/plan-builder-grid')` sang SCR-06A.
+- **Components:**
+  - Thông tin môn: Lập trình Di động (PRM393), badge "3 Tín chỉ", tag "Tiên quyết: Đạt ✅".
+  - Radio Group chọn lớp mở: Danh sách 3 lớp (SE1801, SE1802, SE1803) hiển thị ca, thứ, phòng, giảng viên. Thẻ được chọn có viền xanh `#2563EB`.
+  - Docked Footer: Nút Yêu thích (`IconButton` 48dp) + Nút chính "Thêm vào lịch học" (`FilledButton` cao 52dp, nền `#2563EB`, bo góc 8dp).
+- **Interactions & Navigation:**
+  - Chọn lớp SE1801 ➔ Bấm "Thêm vào lịch học" ➔ `Navigator.pushNamed('/plan-builder-grid')` sang SCR-06A.
+  - Nút Back `[←]` ➔ Quay lại SCR-04.
 
-### SCR-06A — Plan Builder Grid (Xếp lịch học thử - Lưới tuần)
+### 2.6. SCR-06A — Plan Builder Grid (Lưới tuần & Báo động trùng)
 
-- **Layout:** `Scaffold → AppBar("Xếp Lịch Học Thử", Back Button) → SingleChildScrollView(padding: EdgeInsets.only(bottom: 110)) → DockedBottomButton`.
+- **Layout:** `Scaffold` → `AppBar("Xếp Lịch Học Thử", Back [←])` → `SingleChildScrollView(padding: EdgeInsets.only(bottom: 110))` → `DockedBottomButton` (cố định đáy).
 - **Quy tắc điều hướng:** ẨN HOÀN TOÀN Bottom Navigation Bar.
-- **Thành phần quan trọng:**
-  - **Banner cảnh báo trùng (Conflict Alert):** Nền #FEE2E2, viền #DC2626, icon ⚠️, tiêu đề đỏ "Trùng ca 2 Thứ 3! IAE201 trùng ca với PRM393" kèm nút bấm Đổi ca (FilledButton xanh).
-  - **Lưới ma trận tuần (Simulation Grid 5×5):**
-    - Các ca bình thường hiển thị mã môn trên nền trắng ngà.
-    - Ô xung đột (Ca 2 Thứ 3): Nền đỏ #FEE2E2, viền đỏ #DC2626, icon ⚠️ + chữ đậm TRÙNG! Ca 2.
-  - **Nút chuyển trang đáy:** Nút ghim đáy "Xem danh sách môn (4 môn • 12 TC) ➔" (Cao 52dp) → Chuyển sang SCR-06B.
+- **Components & Xử lý xung đột (Conflict Handling):**
+  - Banner báo động trùng (Conflict Banner): Nền đỏ `#FEE2E2`, viền `#DC2626`, icon ⚠️, dòng chữ: "Trùng ca 2 Thứ 3! IAE201 trùng ca với PRM393" + Nút bấm Đổi ca.
+  - Ma trận thời khóa biểu 5×5 (T2 - T6, Ca 1 - Ca 5):
+    - Ô bình thường: Nền `#FFFDF7`, viền `#EAE1D0`, hiển thị mã môn.
+    - Ô xung đột (Ca 2 Thứ 3): Nền đỏ `#FEE2E2`, viền đỏ `#DC2626`, icon ⚠️ + chữ đậm "TRÙNG! Ca 2".
+  - Docked Button đáy: Nút lớn "Xem danh sách môn (4 môn • 12 TC) ➔" (Cao 52dp, nền `#2563EB`).
+- **Navigation:** Chạm vào Banner hoặc nút chân trang ➔ Mở SCR-06B.
 
-### SCR-06B — Selected Courses Management (Quản lý môn đã chọn & Khắc phục lỗi)
+### 2.7. SCR-06B — Selected Courses & SCR-06B_Resolved (Khắc phục lỗi)
 
-- **Layout:** `Scaffold → AppBar("Môn Đã Chọn", Back Button) → ListView(padding: EdgeInsets.only(bottom: 110)) → DockedBottomButton`.
+- **Layout:** `Scaffold` → `AppBar("Môn Đã Chọn", Back [←])` → `ListView(padding: EdgeInsets.only(bottom: 110))` → `DockedBottomButton`.
 - **Quy tắc điều hướng:** ẨN HOÀN TOÀN Bottom Navigation Bar.
-- **Khắc phục xung đột & Phòng ngừa lỗi (Crucial UX):**
-  - **Môn bị xung đột (An toàn Thông tin - IAE201):** Hiển thị khung viền đỏ, tag "Trùng lịch Ca 2 T3".
-  - Bên cạnh icon thùng rác 🗑️, BẮT BUỘC có nút **[Đổi ca khác]** (OutlinedButton đỏ, cao 40dp, touch target 48dp) để mở Modal Bottom Sheet đổi lớp tức thì.
-  - **Nút chân trang "Lưu Thời Khóa Biểu":**
-    - Khi còn trùng ca: Bị VÔ HIỆU HÓA (Disabled), nền #CBD5E1, text #64748B, nhãn: "Giải quyết 1 môn trùng để lưu".
-    - Khi hết trùng ca (0 xung đột): Kích hoạt màu xanh #2563EB, nhãn: "Lưu Thời Khóa Biểu".
-- **Tương tác:** Giải quyết xong trùng lịch → Nhấn "Lưu Thời Khóa Biểu" → Chuyển sang SCR-07.
+- **2 Trạng thái cốt lõi (Core UX Recovery):**
+  - **Trạng thái 1 — SCR-06B_Selected_Courses (Khi còn lỗi trùng ca):**
+    - Thẻ môn An toàn Thông tin (IAE201) viền đỏ `#DC2626`, tag đỏ "Trùng lịch Ca 2 T3".
+    - Có nút hành động: `[⇄ Đổi ca khác]` (`OutlinedButton` đỏ, cao 40dp, touch target 48dp) và icon thùng rác 🗑️.
+    - Nút chân trang "Lưu Thời Khóa Biểu": **BỊ KHÓA (Disabled)**, nền xám `#EAE1D0`, chữ `#78716C`, có icon ổ khóa 🔒, nhãn: "Giải quyết 1 môn trùng để lưu". Người dùng bấm vào không có tác dụng (Error Prevention).
+  - **Trạng thái 2 — SCR-06B_Resolved (Sau khi đã đổi ca thành công):**
+    - Banner trên cùng đổi thành: "✅ 0 môn bị trùng ca học".
+    - Thẻ môn IAE201 trở về trạng thái viền xám bình thường `#EAE1D0`, tag đổi thành lịch học mới (Ca 4 T2, T5).
+    - Nút chân trang: MỞ KHÓA HOÀN TOÀN (Active), nền xanh `#2563EB`, nhãn: "Lưu Thời Khóa Biểu" (chữ trắng `#FFFFFF`).
+- **Interactions & Navigation:**
+  - Tại SCR-06B: Bấm nút `[⇄ Đổi ca khác]` ➔ Chuyển sang SCR-05 Course Detail để chọn ca mới.
+  - Sau khi chọn ca 4 không trùng ở SCR-05 ➔ Chuyển sang SCR-06B_Resolved.
+  - Tại SCR-06B_Resolved: Bấm nút "Lưu Thời Khóa Biểu" (xanh) ➔ `Navigator.pushNamedAndRemoveUntil('/summary', ModalRoute.withName('/home'))` sang SCR-07.
 
-### SCR-07 — Semester Summary & Export PDF (Tổng kết & Xuất báo cáo)
+### 2.8. SCR-07 — Semester Summary & Export PDF
 
-- **Layout:** `Scaffold → AppBar("Tổng Kết Kế Hoạch") → SingleChildScrollView(padding: EdgeInsets.only(bottom: 96)) → NavigationBar (Khôi phục Bottom Bar, tab Tìm môn active)`.
-- **Nội dung hiển thị:**
-  - **Thẻ Hero KPI:** 5 Môn học • 15 Tín chỉ, badge xanh "Kế hoạch hợp lệ ✅", học phí dự kiến "14.250.000 đ".
-  - **Danh sách xác nhận (5 môn):** Hiển thị mã môn, giờ học, giảng viên và dấu tích xanh.
-  - **Cụm hành động xuất file (In-flow Content):** Nút lớn "📄 Xuất file PDF (A4)" (Cao 52dp), nút "Đồng bộ Google Lịch" và "Chia sẻ ảnh TKB".
-- **Tương tác:** Nhấn "Xuất file PDF (A4)" → Mở ModalBottomSheet xem trước bản in theo chuẩn tỷ lệ trang giấy A4 (1 : 1.414).
+- **Layout:** `Scaffold` → `AppBar("Tổng Kết Kế Hoạch")` → `SingleChildScrollView(padding: EdgeInsets.fromLTRB(16, 12, 16, 96))` → `NavigationBar` (Khôi phục Bottom Bar, tab Tìm môn Active).
+- **Components:**
+  - Hero KPI Card: 5 Môn học • 15 Tín chỉ, tag xanh "Kế hoạch hợp lệ ✅", học phí dự kiến "14.250.000 đ".
+  - Danh sách 5 môn đã xác nhận kèm dấu tích xanh ✅.
+  - Cụm nút hành động:
+    - Nút chính: "📄 Xuất file PDF (A4)" (`FilledButton` cao 52dp, nền `#2563EB`, bo góc 8dp).
+    - Hai nút phụ: "Đồng bộ Google Calendar" và "Chia sẻ ảnh TKB".
+- **Interactions & Navigation:**
+  - Bấm "Xuất file PDF (A4)" ➔ Kích hoạt tiến trình tạo file và mở Modal Bottom Sheet / Dialog xem trước bản in khổ A4 (tỷ lệ chuẩn 1 : 1.414).
+  - Màn hình này cũng được mở trực tiếp từ mục "Chi tiết >" của thẻ Học kỳ Fall 2024 ở SCR-08.
 
-### SCR-08 — Profile & Settings (Cá nhân & Cài đặt)
+### 2.9. SCR-08 — Profile & Settings & Overlay_Logout
 
-- **Layout:** `Scaffold → AppBar("Cá Nhân") → SingleChildScrollView(padding: EdgeInsets.only(bottom: 96)) → NavigationBar (Tab Cá nhân active)`.
-- **Nội dung hiển thị:**
-  - **Thông tin sinh viên:** Avatar minh họa tròn, họ tên Trần Hoàng Long, MSSV SE180504 • K18 SE, email trường.
-  - **Thống kê:** Thẻ 15 Tín chỉ (HK 2) và GPA 3.42 (Giỏi).
-  - **Danh mục SwitchListTile (Cao 56dp):** Bật/tắt "Nhắc giờ học trước 15 phút", "Tự động báo trùng lịch".
-  - **Nút nguy hiểm:** "Đăng xuất tài khoản" (Nền #FEE2E2, viền #FCA5A5, chữ đỏ #DC2626).
-- **Tương tác:** Bấm Đăng xuất → Mở AlertDialog xác nhận → Xóa token phiên → `pushNamedAndRemoveUntil('/login')` về SCR-01.
+- **Layout:** `Scaffold` → `AppBar("Cá Nhân")` → `SingleChildScrollView(padding: EdgeInsets.fromLTRB(16, 12, 16, 96))` → `NavigationBar` (Tab Cá nhân Active).
+- **Components:**
+  - Thông tin sinh viên: Avatar tròn 48dp, tên Trần Hoàng Long, MSSV SE180504 • K18 SE. Thẻ 15 Tín chỉ (HK 2) và GPA 3.42 (Giỏi).
+  - Thẻ Học kỳ Fall 2024: Có nút Chi tiết > (màu xanh `#2563EB`, touch target 48dp).
+  - Cài đặt ứng dụng: 3 switch toggle cao 56dp (Nhắc giờ học 15p, Tự động báo trùng lịch, Đồng bộ Google Calendar).
+  - Nút nguy hiểm: `[-> Đăng xuất tài khoản` (Nền `#FEE2E2`, viền `#DC2626`, chữ đỏ `#DC2626`, cao 48dp).
+- **Overlay Dialog — Overlay_Logout:**
+  - Mở dạng Modal Dialog căn giữa màn hình (Centered) trên nền đen mờ 40% (`barrierColor: Colors.black40`).
+  - Kích thước: Rộng 320dp, bo góc 16dp, nền `#FFFDF7`, viền 1px `#EAE1D0`, padding 20dp.
+  - Tiêu đề: "Đăng xuất tài khoản?" (Inter SemiBold 18px).
+  - Nội dung: "Bạn có chắc chắn muốn đăng xuất? Bạn sẽ cần đăng nhập lại bằng tài khoản trường để tiếp tục đồng bộ lịch học." (Inter Regular 14px, màu `#78716C`).
+  - 2 nút hành động (cao 48dp, chia đều chiều rộng 50/50):
+    - Nút "Hủy": `OutlinedButton`, nền `#FFFDF7`, viền `#EAE1D0`, chữ `#1C1917`. Bấm vào ➔ `Navigator.pop(context)` đóng dialog.
+    - Nút "Đăng xuất": `FilledButton`, nền đỏ `#DC2626`, chữ trắng `#FFFFFF`. Bấm vào ➔ Xóa session và gọi `Navigator.pushNamedAndRemoveUntil('/login', (route) => false)` quay về SCR-01.
 
-## Phần 3 — Responsive (width ≥ 600 dp) & Checklist UI
+---
+
+## Phần 3 — Responsive (width ≥ 600 dp) & Checklist QA
 
 ### 3.1. Quy tắc Responsive Tablet / Landscape (Width ≥ 600 dp)
 
-- **Navigation Transition:** `NavigationBar` ở đáy màn hình tự động chuyển đổi thành `NavigationRail` cố định ở cạnh trái màn hình.
-- **Content Max-Width Constraint:** Toàn bộ nội dung đọc chính (Hero card, Course catalog, Profile settings) bọc trong:
+- **Navigation Transition:** `NavigationBar` ở đáy màn hình tự động chuyển đổi thành `NavigationRail` cố định ở mép trái màn hình.
+- **Content Centering & Max-Width:** Toàn bộ nội dung cuộn (Hero cards, Form đăng ký, Profile) bọc trong:
 
   ```dart
-  Center(child: ConstrainedBox(constraints: BoxConstraints(maxWidth: 540), child: content))
+  Center(
+    child: ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 540.0),
+      child: contentWidget,
+    ),
+  )
   ```
 
-- **Lưới thời khóa biểu (SCR-06A):** Màn hình ≥ 600 dp hiển thị cố định toàn bộ 5 cột ngày (T2–T6), không cần kích hoạt tính năng cuộn ngang.
+- **Lưới xếp lịch (SCR-06A):** Trên màn hình rộng ≥ 600 dp, hiển thị cố định toàn bộ 5 cột ngày trong tuần (T2 - T6) song song mà không cần cuộn ngang.
 
-### 3.2. Checklist nghiệm thu UI (Flutter Dev QA Checklist)
+### 3.2. Checklist nghiệm thu UI cho Flutter Developer (QA Checklist)
 
-- **Màu sắc & Chống chói:** Nền toàn bộ Scaffold đạt mã #FAF7F2; thẻ đạt mã #FFFDF7; viền thẻ nét liền 1px solid #EAE1D0. Không có bất kỳ thành phần nào dùng nền trắng xanh #FFFFFF gây chói mắt.
-- **Độ tương phản nút [Hôm nay] (SCR-03):** Chữ nâu đậm #78350F trên nền vàng #FEF3C7 (Đạt WCAG AAA ≥ 7:1).
-- **Nhận diện thương hiệu & Avatar:** 100% Top App Bar sử dụng chung Master Logo EduPlan và avatar minh họa của Trần Hoàng Long.
-- **Bottom Navigation Bar:**
-  - Hiển thị cố định trên: SCR-02, SCR-03, SCR-04, SCR-07, SCR-08.
-  - ẨN HOÀN TOÀN trên: SCR-01, SCR-05, SCR-06A, SCR-06B.
-- **Vùng an toàn cuộn (Bottom Clearance):**
-  - Màn hình có Bottom Bar: padding-bottom: 96dp.
-  - Màn hình có Docked Footer Button (SCR-05, 06A, 06B): padding-bottom: 110dp đến 160dp.
-- **Phòng ngừa lỗi (SCR-06B):** Nút "Lưu Thời Khóa Biểu" bị khóa disabled khi còn môn báo trùng ca; có nút "Đổi ca khác" cạnh icon thùng rác.
-- **Kích thước vùng chạm:** Tất cả các nút bấm, icon button, switch tile có diện tích chạm tối thiểu 48×48 dp.
+- [ ] **Màn hình chuẩn 390 × 800 dp:** Đảm bảo bố cục hiển thị vừa vặn trên màn hình chuẩn 390dp và co giãn tốt trên 412dp.
+- [ ] **Bảng màu Warm Paper:** 100% Scaffold dùng nền `#FBF6EB`; thẻ dùng `#FFFDF7`; viền nét liền 1px `#EAE1D0`. Tuyệt đối không dùng nền trắng tinh gây chói mắt.
+- [ ] **Độ tương phản tiếp cận (WCAG 2.1 AA/AAA):** Chữ nội dung tối thiểu 14sp; chữ tiêu đề đạt tương phản >12:1; nút `[Hôm nay]` dùng chữ nâu đậm `#78350F` trên nền vàng `#FEF3C7` (tương phản 7.2:1).
+- [ ] **Kích thước vùng chạm (Touch Target):** Mọi nút bấm, icon button, radio item, filter chip có diện tích bấm tối thiểu 48 × 48 dp.
+- [ ] **Quy tắc hiển thị Bottom Navigation Bar (64dp):**
+  - HIỂN THỊ: SCR-02, SCR-03, SCR-04, SCR-07, SCR-08.
+  - ẨN HOÀN TOÀN: SCR-01, SCR-05, SCR-06A, SCR-06B, SCR-06B_Resolved.
+- [ ] **Bottom Clearance (Khoảng đệm an toàn):**
+  - Màn hình có Bottom Bar: `padding-bottom: 96.0`.
+  - Màn hình có Footer Button (SCR-05, 06A, 06B): `padding-bottom: 110.0` đến `120.0`.
+- [ ] **Phòng ngừa & Phục hồi lỗi (SCR-06B & SCR-06B_Resolved):**
+  - Nút "Lưu Thời Khóa Biểu" bị khóa mờ khi còn môn trùng lịch.
+  - Có nút `[⇄ Đổi ca khác]` cạnh môn trùng để hoán đổi lịch tại chỗ.
+  - Sau khi đổi ca thành công, nút Lưu sáng xanh `#2563EB` cho phép bấm tiếp.
+- [ ] **Đầy đủ các States:** Có màn hình Loading (Spinner & Skeleton), Empty State (kính lúp tìm kiếm rỗng), Error Banner (offline/mất mạng), và Modal Dialog Overlay xác nhận đăng xuất.
